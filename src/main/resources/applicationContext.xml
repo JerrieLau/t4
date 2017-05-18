@@ -4,13 +4,15 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <context:property-placeholder location="classpath:t4.properties"/>
+
     <!--Atomikos数据源Bean-->
     <bean id="atomikosDataSourceBean" class="com.atomikos.jdbc.AtomikosDataSourceBean">
         <property name="xaProperties">
             <props>
-                <prop key="url">jdbc:mysql://localhost:3306/test?useUnicode=true</prop>
-                <prop key="user">root</prop>
-                <prop key="password">123456</prop>
+                <prop key="url">${db.url}</prop>
+                <prop key="user">${db.user}</prop>
+                <prop key="password">${db.password}</prop>
             </props>
         </property>
         <property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource"/>
@@ -34,7 +36,7 @@
 
     <!--ActiveMQ连接工厂-->
     <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="brokerURL" value="${mq.brokerURL}"/>
     </bean>
 
     <!--Spring JmsTemplate-->
