@@ -7,9 +7,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @ImportResource(locations = "classpath*:applicationContext.xml")
+@EnableTransactionManagement
 public class T4Application {
 
     public static void main(String[] args) {
@@ -24,5 +26,8 @@ public class T4Application {
         score.setScore(RandomUtils.nextFloat(0, 100));
 
         service.save(score);
+
+        context.stop();
+        context.close();
     }
 }

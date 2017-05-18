@@ -32,13 +32,21 @@
     </bean>
 
     <!--ActiveMQ连接工厂-->
-    <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+    <bean id="activeMQXAConnectionFactory" class="org.apache.activemq.ActiveMQXAConnectionFactory">
         <property name="brokerURL" value="${mq.brokerURL}"/>
+        <property name="alwaysSessionAsync" value="false"/>
+        <property name="alwaysSyncSend" value="true"/>
+    </bean>
+
+    <!--Atomikos连接工厂Bean，支持分布式事务，2PC -->
+    <bean primary="true" id="atomikosConnectionFactoryBean" class="org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean">
+        <property name="xaConnectionFactory" ref="activeMQXAConnectionFactory"/>
+        <property name="localTransactionMode" value="false"/>
     </bean>
 
     <!--Spring JmsTemplate-->
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="activeMQConnectionFactory"/>
+        <property name="connectionFactory" ref="atomikosConnectionFactoryBean"/>
         <property name="pubSubDomain" value="false"/>
     </bean>
 
