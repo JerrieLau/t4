@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="jmsRepository" class="com.yxtec.t4.repository.JmsRepository"/>
+
+    <bean class="com.yxtec.t4.repository.JmsRepositoryTest"/>
+
+    <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.1.11:61616"/>
+        <property name="alwaysSessionAsync" value="false"/>
+        <property name="alwaysSyncSend" value="true"/>
+    </bean>
+
+    <!--队列定义-->
+    <bean id="activeMQQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="scores"/>
+    </bean>
+
+    <!--Spring JmsTemplate-->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="activeMQConnectionFactory"/>
+        <property name="pubSubDomain" value="false"/>
+    </bean>
+
+    <bean id="gson" class="com.google.gson.Gson" />
+
+</beans>

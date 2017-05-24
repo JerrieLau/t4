@@ -39,7 +39,8 @@
     </bean>
 
     <!--Atomikos连接工厂Bean，支持分布式事务，2PC -->
-    <bean primary="true" id="atomikosConnectionFactoryBean" class="org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean">
+    <bean primary="true" id="atomikosConnectionFactoryBean"
+          class="org.springframework.boot.jta.atomikos.AtomikosConnectionFactoryBean">
         <property name="xaConnectionFactory" ref="activeMQXAConnectionFactory"/>
         <property name="localTransactionMode" value="false"/>
     </bean>
@@ -49,5 +50,25 @@
         <property name="connectionFactory" ref="atomikosConnectionFactoryBean"/>
         <property name="pubSubDomain" value="false"/>
     </bean>
+
+    <!--Queue-->
+    <bean id="activeMQQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="scores"/>
+    </bean>
+
+    <!--Gson-->
+    <bean id="gson" class="com.google.gson.Gson"/>
+
+    <!--消息监听器-->
+    <bean id="testMessageListener" class="com.yxtec.t4.consumer.TestMessageListener"/>
+
+    <!--消息监听器容器-->
+    <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="messageListener" ref="testMessageListener"/>
+        <property name="connectionFactory" ref="activeMQXAConnectionFactory"/>
+        <property name="destination" ref="activeMQQueue"/>
+    </bean>
+
+    <bean id="testBean" class="com.yxtec.t4.consumer.TestBean" scope="singleton" lazy-init="true" init-method="initMethod" destroy-method="destroyMethod"/>
 
 </beans>

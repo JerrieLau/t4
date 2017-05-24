@@ -6,14 +6,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
-import org.springframework.jms.core.ProducerCallback;
 import org.springframework.stereotype.Repository;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
 
 /**
  * TODO 类描述
@@ -28,9 +21,11 @@ public class JmsRepository {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    private ActiveMQQueue queue = new ActiveMQQueue("scores");
+    @Autowired
+    private ActiveMQQueue queue;
 
-    private Gson gson = new Gson();
+    @Autowired
+    private Gson gson;
 
     public void sendScoreMessage(Score score) {
         jmsTemplate.execute((session, messageProducer) -> {
